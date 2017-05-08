@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TempApp</string>
+    <string name="action_settings">Sync</string>
+</resources>
