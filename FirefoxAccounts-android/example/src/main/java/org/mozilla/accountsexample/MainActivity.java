@@ -93,6 +93,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void patternUnlockTooManyAttempts() {
                 AppGlobals.prefs(getApplicationContext()).edit().clear().commit();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.exit(0);
+                    }
+                }, 400);
+
             }
         };
         PatternLockActivity.unlockCode = keystore.getPINCode();
