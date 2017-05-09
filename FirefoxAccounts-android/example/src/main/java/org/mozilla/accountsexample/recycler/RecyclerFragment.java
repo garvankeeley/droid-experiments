@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import org.mozilla.accountsexample.R;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class RecyclerFragment extends Fragment {
 
@@ -18,8 +19,6 @@ public class RecyclerFragment extends Fragment {
     private ItemAdapter itemAdapter;
 
     public RecyclerFragment() {
-        ItemAdapter.keyTitle = "site";
-        ItemAdapter.keySubtitle = "username";
     }
 
     public static RecyclerFragment newInstance(/* params in future*/) {
@@ -37,19 +36,16 @@ public class RecyclerFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         itemAdapter = new ItemAdapter(items);
         recyclerView.setAdapter(itemAdapter);
-        loadData();
         return view;
     }
 
-    private void loadData() {
-        //Add some test items - enough to cause the recycler to be used
-        for(int i = 0; i < 10000; ++i) {
+    public void loadData(List<Map<String, String>> records) {
+        for (Map<String, String> record : records) {
             ItemAdapter.Item item = new ItemAdapter.Item();
-            item.data.put("site", "www.google.ca");
-            item.data.put("username", "garvankeeley@gmail.com");
+            item.data = record;
             items.add(item);
         }
+
+        itemAdapter.notifyDataSetChanged();
     }
-
-
 }

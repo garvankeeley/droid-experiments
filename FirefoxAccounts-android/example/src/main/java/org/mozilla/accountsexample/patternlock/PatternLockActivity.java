@@ -3,6 +3,7 @@ package org.mozilla.accountsexample.patternlock;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,14 +31,23 @@ public class PatternLockActivity extends AppCompatActivity {
     }
 
     private static final int MAX_ATTEMPTS = 4;
-    private static final int MIN_PATTERN_LENGTH = 3;
+    private static final int MIN_PATTERN_LENGTH = 4;
     private PatternLockView mPatternLockView;
     private TextView titleView;
-    private String unlockCode;
     private Boolean isCreateMode = true;
     private final int SHORT_DELAY = 300;
     private final int LONG_DELAY = 500;
-    public PatternLockListener listener;
+
+    public static PatternLockListener listener;
+    public static String unlockCode;
+
+    @Override
+    public void onBackPressed() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
+    }
 
     private PatternLockViewListener mPatternLockViewListener = new PatternLockViewListener() {
         @Override public void onStarted() {}
@@ -93,6 +103,7 @@ public class PatternLockActivity extends AppCompatActivity {
                     @Override public void run() {
                         if (listener != null) {
                             listener.patternUnlockValidated();
+                            finish();
                         }
                     }
                 });
@@ -134,6 +145,7 @@ public class PatternLockActivity extends AppCompatActivity {
                     @Override public void run() {
                         if (listener != null) {
                             listener.patternLockCreated(unlockCode);
+                            finish();
                         }
                     }
                 });
@@ -172,9 +184,6 @@ public class PatternLockActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_pattern_lock);
 
-        unlockCode = "012";
-        isCreateMode = TextUtils.isEmpty(unlockCode);
-
         titleView = (TextView) findViewById(R.id.unlock_title);
 
         mPatternLockView = (PatternLockView) findViewById(R.id.patter_lock_view);
@@ -193,6 +202,7 @@ public class PatternLockActivity extends AppCompatActivity {
         mPatternLockView.setInputEnabled(true);
         mPatternLockView.addPatternLockListener(mPatternLockViewListener);
 
+        isCreateMode = TextUtils.isEmpty(unlockCode);
 
         if (!isCreateMode) {
             titleView.setText("Enter Unlock Code");

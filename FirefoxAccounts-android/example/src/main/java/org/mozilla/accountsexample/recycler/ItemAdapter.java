@@ -12,6 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.mozilla.accountsexample.AppGlobals.REC_HOSTNAME;
+import static org.mozilla.accountsexample.AppGlobals.REC_PASSWORD;
+import static org.mozilla.accountsexample.AppGlobals.REC_USERNAME;
+
 
 /**
  * A simple RecyclerView.Adapter class that manages items.
@@ -20,8 +24,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemViewHolder> {
 
     private List<ItemAdapter.Item> mItems;
 
-    public static String keyTitle = "";
-    public static String keySubtitle = "";
+    public static final String keyTitle = REC_HOSTNAME;
+    public static final String keySubtitle = REC_USERNAME;
 
     public static class Item {
         Map<String, String> data = new HashMap<>();
@@ -40,17 +44,19 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemViewHolder> {
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-        Item item = mItems.get(position);
+        final Item item = mItems.get(position);
         final String title = item.data.get(keyTitle);
         holder.title.setText(title);
         holder.subtitle.setText(item.data.get(keySubtitle));
 
-        //apply on click on your root view
         final View root = holder.title.getRootView();
         root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClipboardDialog.show("www.google.com", root.getContext());
+                ClipboardDialog.show(item.data.get(REC_HOSTNAME),
+                        item.data.get(REC_USERNAME),
+                        item.data.get(REC_PASSWORD),
+                        root.getContext());
             }
         });
     }

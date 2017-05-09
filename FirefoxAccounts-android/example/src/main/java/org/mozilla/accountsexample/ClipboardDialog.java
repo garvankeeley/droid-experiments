@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
+import static org.mozilla.accountsexample.AppGlobals.REC_USERNAME;
 
 public class ClipboardDialog {
     private static void setClip(String text, Context context) {
@@ -12,14 +13,14 @@ public class ClipboardDialog {
         clipboard.setText(text);
     }
 
-    public static void show(String site, final Context context) {
+    public static void show(String site, final String username, final String password, final Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(site);
         builder.setMessage("Copy the username or password for this site to the clipboard?");
         builder.setNegativeButton("Username",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        setClip("garvankeeley@gmail.com", context);
+                        setClip(username, context);
                         dialog.cancel();
                     }
                 });
@@ -27,7 +28,7 @@ public class ClipboardDialog {
         builder.setPositiveButton("Password",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        setClip("password", context);
+                        setClip(password, context);
                         dialog.cancel();
                     }
                 });
